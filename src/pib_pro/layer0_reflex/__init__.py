@@ -31,6 +31,8 @@ class ComplianceEventKind(Enum):
     LIMIT = auto()
     COLLISION = auto()
     ESTOP = auto()
+    HANDOVER_RELEASE = auto()
+    COMPLIANT_GUIDANCE = auto()
 
 
 @dataclass(frozen=True, slots=True)
@@ -48,3 +50,33 @@ class SomaticReflexProtocol(Protocol):
     def apply_command(self, cmd: ActuatorCommand, stamp_monotonic_s: float) -> None: ...
 
     def poll_compliance(self) -> tuple[ComplianceEvent, ...]: ...
+
+
+from pib_pro.layer0_reflex.somatic_reflex import (  # noqa: E402
+    Capsule3D,
+    JointLimitsConfig,
+    SafeMotorCommand,
+    SomaticReflexController,
+    build_human_hand_capsule,
+    build_human_torso_capsule,
+    build_robot_forearm_capsule,
+    capsule_distance_m,
+    proximity_velocity_scale,
+)
+
+__all__ = [
+    "ActuatorCommand",
+    "Capsule3D",
+    "ComplianceEvent",
+    "ComplianceEventKind",
+    "JointLimitsConfig",
+    "SafeMotorCommand",
+    "SafetyEnvelopeConfig",
+    "SomaticReflexController",
+    "SomaticReflexProtocol",
+    "build_human_hand_capsule",
+    "build_human_torso_capsule",
+    "build_robot_forearm_capsule",
+    "capsule_distance_m",
+    "proximity_velocity_scale",
+]

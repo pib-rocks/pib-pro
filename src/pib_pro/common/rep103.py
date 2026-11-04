@@ -16,7 +16,8 @@ AXIS_Y_LEFT: Final[str] = "y"
 AXIS_Z_UP: Final[str] = "z"
 
 FRAME_BASE_LINK: Final[str] = "base_link"
-FRAME_CAMERA_OAK4_OPTICAL: Final[str] = "camera_oak4_optical_frame"
+FRAME_CHEST_CAMERA_OAK4_OPTICAL: Final[str] = "chest_camera_oak4_optical_frame"
+FRAME_CAMERA_OAK4_OPTICAL: Final[str] = FRAME_CHEST_CAMERA_OAK4_OPTICAL
 FRAME_NECK_LINK: Final[str] = "neck_link"
 FRAME_HAND_LEFT: Final[str] = "hand_left_link"
 FRAME_HAND_RIGHT: Final[str] = "hand_right_link"
@@ -24,6 +25,7 @@ FRAME_HAND_RIGHT: Final[str] = "hand_right_link"
 STANDARD_FRAMES: Final[frozenset[str]] = frozenset(
     {
         FRAME_BASE_LINK,
+        FRAME_CHEST_CAMERA_OAK4_OPTICAL,
         FRAME_CAMERA_OAK4_OPTICAL,
         FRAME_NECK_LINK,
         FRAME_HAND_LEFT,

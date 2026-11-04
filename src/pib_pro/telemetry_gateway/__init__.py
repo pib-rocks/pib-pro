@@ -2,22 +2,15 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Protocol
+from pib_pro.telemetry_gateway.gateway import (
+    NonBlockingTelemetryGateway,
+    TelemetryPayload,
+)
+from pib_pro.telemetry_gateway.snapshot import TelemetryGatewayProtocol, TelemetrySnapshot
 
-
-@dataclass(frozen=True, slots=True)
-class TelemetrySnapshot:
-    stamp_monotonic_s: float
-    cpu_util_pct: float
-    gpu_util_pct: float
-    bus_hz: float
-    layer0_hz: float
-    thermal_max_c: float
-    power_headroom_pct: float
-
-
-class TelemetryGatewayProtocol(Protocol):
-    def collect(self, stamp_monotonic_s: float) -> TelemetrySnapshot: ...
-
-    def publish_json(self, snapshot: TelemetrySnapshot) -> str: ...
+__all__ = [
+    "NonBlockingTelemetryGateway",
+    "TelemetryGatewayProtocol",
+    "TelemetryPayload",
+    "TelemetrySnapshot",
+]

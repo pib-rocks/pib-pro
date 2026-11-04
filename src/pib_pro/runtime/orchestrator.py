@@ -40,6 +40,7 @@ from pib_pro.layer3_cognition.thor_llama_client import ThorLlamaClientConfig
 from pib_pro.perception_oak4.human_state import HumanObservation3D
 from pib_pro.perception_oak4.scene_graph import Detection2DWithDepth, Oak4CameraIntrinsics
 from pib_pro.telemetry_gateway.gateway import NonBlockingTelemetryGateway
+from pib_pro.telemetry_gateway.hud_server import TelemetryHudServer
 from pib_pro.world_model.hjepa_engine import HJEPAWorldModelEngine
 from pib_pro.world_state_bus import WorldStateRingBuffer
 from pib_pro.world_state_bus.schema import BUS_PERIOD_NS, LATENT_DIM, MAX_JOINTS
@@ -375,7 +376,35 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--demo", action="store_true", help="Run closed-loop demo scenario")
     parser.add_argument("--steps", type=int, default=40, help="Demo steps (30 Hz bus ticks)")
     parser.add_argument("--json-out", type=str, default="", help="Write demo report JSON to path")
+    parser.add_argument(
+        "--serve-hud-port",
+        type=int,
+        default=0,
+        help="Serve offline telemetry HUD on this localhost port (0=disabled)",
+    )
+    parser.add_argument(
+        "--serve-hud-once",
+        action="store_true",
+        help="Start HUD server, wait for one telemetry poll window, then exit",
+    )
     args = parser.parse_args(list(argv) if argv is not None else None)
+
+    if args.serve_hud_port > 0:
+        bus = WorldStateRingBuffer(capacity=8)
+        gateway = NonBlockingTelemetryGateway(bus=bus)
+        hud = TelemetryHudServer(gateway, host="127.0.0.1", port=args.serve_hud_port)
+        hud.start_background()
+        print(json.dumps({"hud_base_url": hud.base_url}), flush=True)
+        if args.serve_hud_once:
+            time.sleep(1.2)
+            hud.stop()
+            return 0
+        try:
+            while True:
+                time.sleep(3600.0)
+        except KeyboardInterrupt:
+            hud.stop()
+            return 0
 
     if not args.demo:
         parser.print_help()

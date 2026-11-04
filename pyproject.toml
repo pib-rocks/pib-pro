@@ -21,6 +21,7 @@ dev = [
 
 [project.scripts]
 pib-pro-thor-probe = "pib_pro.diagnostics.thor_probe:main"
+pib-pro-provision-models = "pib_pro.diagnostics.model_provisioner:main"
 pib-pro-run = "pib_pro.runtime.orchestrator:main"
 
 [tool.setuptools.packages.find]

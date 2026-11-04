@@ -21,6 +21,14 @@ from pib_pro.drivers.feetech_sts import (
     sts_checksum,
     sts_ticks_to_radians,
 )
+from pib_pro.drivers.hardware_backends import (
+    ChestOak4HardwareStatus,
+    DiscoveredFeetechPort,
+    DiscoveredSeeedMicArray,
+    discover_feetech_serial_ports,
+    discover_seeed_respeaker_usb,
+    probe_chest_oak4_hardware,
+)
 from pib_pro.drivers.seeed_respeaker import (
     SeeedRespeakerDriver,
     extract_aec_ch0_frame,
@@ -36,7 +44,13 @@ __all__ = [
     "STS_INST_READ",
     "STS_INST_SYNC_WRITE",
     "STS_TICKS_PER_REV",
+    "ChestOak4HardwareStatus",
     "ChestOak4Driver",
+    "DiscoveredFeetechPort",
+    "DiscoveredSeeedMicArray",
+    "discover_feetech_serial_ports",
+    "discover_seeed_respeaker_usb",
+    "probe_chest_oak4_hardware",
     "FeetechStsBusDriver",
     "InMemoryLoopbackSerialTransport",
     "SeeedRespeakerDriver",

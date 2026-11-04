@@ -9,6 +9,14 @@ import numpy as np
 from numpy.typing import NDArray
 
 from pib_pro.common import JointStateSnapshot, Vector3D
+from pib_pro.world_model.hjepa_engine import HJEPAConfig, HJEPAWorldModelEngine
+
+__all__ = [
+    "HJEPAConfig",
+    "HJEPAWorldModelEngine",
+    "HJEPAWorldModelProtocol",
+    "LatentStateVector",
+]
 
 
 @dataclass(frozen=True, slots=True)

@@ -6,6 +6,25 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pib_pro.common import Pose3D, Vector3D
+from pib_pro.perception_oak4.human_state import HumanObservation3D, HumanStateAndAttentionSolver
+from pib_pro.perception_oak4.scene_graph import (
+    Detection2DWithDepth,
+    MetricSemanticSceneGraph,
+    Oak4CameraIntrinsics,
+    PoseTransform3D,
+)
+
+__all__ = [
+    "Detection2DWithDepth",
+    "HumanObservation3D",
+    "HumanState3D",
+    "HumanStateAndAttentionSolver",
+    "MetricSemanticSceneGraph",
+    "Oak4CameraIntrinsics",
+    "PoseTransform3D",
+    "ScenePerceptionProtocol",
+    "TrackedObject4D",
+]
 
 
 @dataclass(frozen=True, slots=True)

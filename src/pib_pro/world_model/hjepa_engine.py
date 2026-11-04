@@ -94,6 +94,23 @@ class HJEPAWorldModelEngine:
         if human is not None:
             self._human_w = np.asarray(human, dtype=np.float32)
 
+    def nudge_action_projection(
+        self,
+        latent_error: NDArray[np.float32],
+        action: NDArray[np.float32],
+        *,
+        learning_rate: float = 0.05,
+    ) -> None:
+        """Rank-one residual update for offline consolidation."""
+        act = np.zeros(MAX_JOINTS, dtype=np.float32)
+        src = np.asarray(action, dtype=np.float32).reshape(-1)
+        n = min(src.size, MAX_JOINTS)
+        act[:n] = src[:n]
+        err = np.asarray(latent_error, dtype=np.float32).reshape(-1)
+        self._action_w = (
+            self._action_w + learning_rate * np.outer(err, act)
+        ).astype(np.float32)
+
     def _normalize_latent(self, z: NDArray[np.float32]) -> NDArray[np.float32]:
         return np.clip(z, -10.0, 10.0).astype(np.float32)
 

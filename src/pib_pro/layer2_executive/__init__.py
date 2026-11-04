@@ -1,4 +1,4 @@
-"""Layer 2 executive surprise and communicative scheduling."""
+"""Layer 2 executive: surprise BT, multimodal scheduling, chest OAK-4 & ReSpeaker."""
 
 from __future__ import annotations
 
@@ -6,6 +6,39 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pib_pro.common import ProactivityTier
+from pib_pro.layer2_executive.communicative_act import (
+    ActOutputState,
+    ActPhase,
+    BargeInCancelReport,
+    MultimodalActScheduler,
+    MultimodalCommunicativeAct,
+    ScheduledActTimeline,
+)
+from pib_pro.layer2_executive.surprise_bt import (
+    BTSkillStep,
+    BTStatus,
+    SurpriseGatedBehaviourTree,
+    SurprisePreemptionResult,
+    run_workbench_task_plan,
+)
+
+__all__ = [
+    "ActOutputState",
+    "ActPhase",
+    "BTSkillStep",
+    "BTStatus",
+    "BargeInCancelReport",
+    "CommunicativeAct",
+    "CommunicativeActSchedulerProtocol",
+    "MultimodalActScheduler",
+    "MultimodalCommunicativeAct",
+    "ScheduledActTimeline",
+    "SurpriseBTProtocol",
+    "SurpriseEvent",
+    "SurpriseGatedBehaviourTree",
+    "SurprisePreemptionResult",
+    "run_workbench_task_plan",
+]
 
 
 @dataclass(frozen=True, slots=True)

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import math
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Final
 
 import numpy as np
 from numpy.typing import NDArray
@@ -25,6 +25,35 @@ GAZE_WEIGHT: float = 1.0
 POINTING_WEIGHT: float = 2.5
 HIT_BONUS: float = 0.35
 SOFTMAX_TEMPERATURE: float = 0.08
+
+SEED_RESPEAKER_USB_VID: Final[int] = 0x2886
+SEED_RESPEAKER_USB_PID: Final[int] = 0x0018
+
+
+@dataclass(frozen=True, slots=True)
+class SeeedMicArrayConfig:
+    """Seeed Studio ReSpeaker Mic Array v2.0 (XVF3000) capture profile."""
+
+    usb_vid: int = SEED_RESPEAKER_USB_VID
+    usb_pid: int = SEED_RESPEAKER_USB_PID
+    model_name: str = "Seeed ReSpeaker Mic Array v2.0 (XVF3000)"
+    channels: int = 6
+    aec_reference_channel: int = 0
+    sample_rate_hz: int = 16000
+    period_size_frames: int = 256
+    mounting_yaw_offset_rad: float = 0.0
+
+
+def seeed_doa_deg_to_rep103_azimuth_rad(
+    doa_deg: float,
+    mounting_yaw_offset_rad: float = 0.0,
+) -> float:
+    """Map Seeed 0..360° DOA to REP-103 azimuth (0 = +X forward, +π/2 = +Y left)."""
+    if not math.isfinite(doa_deg):
+        raise ValueError("seeed_doa_deg_to_rep103_azimuth_rad: doa_deg must be finite")
+    wrapped = doa_deg % 360.0
+    az = math.radians(wrapped) + mounting_yaw_offset_rad
+    return math.atan2(math.sin(az), math.cos(az))
 
 
 @dataclass(frozen=True, slots=True)

@@ -6,12 +6,19 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from pib_pro.common import Pose3D, Vector3D
-from pib_pro.perception_oak4.human_state import HumanObservation3D, HumanStateAndAttentionSolver
+from pib_pro.perception_oak4.human_state import (
+    HumanObservation3D,
+    HumanStateAndAttentionSolver,
+    SeeedMicArrayConfig,
+    seeed_doa_deg_to_rep103_azimuth_rad,
+)
 from pib_pro.perception_oak4.scene_graph import (
     Detection2DWithDepth,
     MetricSemanticSceneGraph,
     Oak4CameraIntrinsics,
     PoseTransform3D,
+    SelfArmMaskConfig,
+    filter_self_arm_occlusions,
 )
 
 __all__ = [
@@ -23,6 +30,10 @@ __all__ = [
     "Oak4CameraIntrinsics",
     "PoseTransform3D",
     "ScenePerceptionProtocol",
+    "SeeedMicArrayConfig",
+    "SelfArmMaskConfig",
+    "filter_self_arm_occlusions",
+    "seeed_doa_deg_to_rep103_azimuth_rad",
     "TrackedObject4D",
 ]
 

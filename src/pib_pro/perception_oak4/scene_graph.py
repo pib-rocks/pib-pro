@@ -60,7 +60,7 @@ class PoseTransform3D:
 
     @classmethod
     def oak4_optical_to_rep103_base(cls) -> PoseTransform3D:
-        """Standard OAK optical (X right, Y down, Z forward) -> REP-103 base_link."""
+        """Standard OAK optical (X right, Y down, Z forward) -> REP-103 base_link (head mount)."""
         rot = np.array(
             [
                 [0.0, 0.0, 1.0],
@@ -71,6 +71,32 @@ class PoseTransform3D:
         )
         return cls(
             translation_base_from_optical=Vector3D(0.0, 0.0, 0.0),
+            rotation_base_from_optical=rot,
+        )
+
+    @classmethod
+    def oak4_chest_optical_to_rep103_base(
+        cls,
+        chest_x_m: float = 0.08,
+        chest_y_m: float = 0.0,
+        chest_z_m: float = 0.82,
+        pitch_down_rad: float = 0.1745,
+    ) -> PoseTransform3D:
+        """Chest-mounted OAK 4 D Pro fixed to ``base_link`` (invariant to head/neck pose)."""
+        base_rot = cls.oak4_optical_to_rep103_base().rotation_base_from_optical
+        cp = math.cos(pitch_down_rad)
+        sp = math.sin(pitch_down_rad)
+        pitch_rot = np.array(
+            [
+                [cp, 0.0, sp],
+                [0.0, 1.0, 0.0],
+                [-sp, 0.0, cp],
+            ],
+            dtype=np.float64,
+        )
+        rot = pitch_rot @ base_rot
+        return cls(
+            translation_base_from_optical=Vector3D(chest_x_m, chest_y_m, chest_z_m),
             rotation_base_from_optical=rot,
         )
 
@@ -115,6 +141,50 @@ class Detection2DWithDepth:
         y_opt = (v - intrinsics.cy) * self.depth_m / intrinsics.fy
         z_opt = self.depth_m
         return extrinsic.transform_point_optical_to_base(x_opt, y_opt, z_opt)
+
+
+@dataclass(frozen=True, slots=True)
+class SelfArmMaskConfig:
+    """Parameters for masking self-arm false positives in chest OAK-4 detections."""
+
+    intrinsics: Oak4CameraIntrinsics
+    extrinsic: PoseTransform3D
+    persistent_track_positions: tuple[Vector3D, ...] = ()
+    track_match_radius_m: float = 0.12
+
+
+def filter_self_arm_occlusions(
+    detections: tuple[Detection2DWithDepth, ...],
+    left_ee_xyz: Vector3D,
+    right_ee_xyz: Vector3D,
+    config: SelfArmMaskConfig,
+    *,
+    arm_mask_radius_m: float = 0.065,
+) -> tuple[Detection2DWithDepth, ...]:
+    """Drop detections that coincide with the robot's own arms in 3D."""
+    cam_pos = config.extrinsic.translation_base_from_optical
+    kept: list[Detection2DWithDepth] = []
+    for det in detections:
+        pos = det.deproject_to_rep103(config.intrinsics, config.extrinsic)
+        d_left = _euclidean(pos, left_ee_xyz)
+        d_right = _euclidean(pos, right_ee_xyz)
+        near_arm = min(d_left, d_right) <= arm_mask_radius_m
+        if not near_arm:
+            kept.append(det)
+            continue
+        matched_track = False
+        for track_pos in config.persistent_track_positions:
+            if _euclidean(pos, track_pos) <= config.track_match_radius_m:
+                matched_track = True
+                break
+        arm_ref = left_ee_xyz if d_left <= d_right else right_ee_xyz
+        det_range = _euclidean(pos, cam_pos)
+        arm_range = _euclidean(arm_ref, cam_pos)
+        if matched_track and det_range >= arm_range:
+            kept.append(det)
+            continue
+        # Self-arm false positive (untracked blob on the hand / forearm).
+    return tuple(kept)
 
 
 @dataclass(slots=True)

@@ -47,3 +47,21 @@ class HybridVisuomotorProtocol(Protocol):
         chunks: tuple[ScoredActionChunk, ...],
         optical_error: Vector3D,
     ) -> ScoredActionChunk: ...
+
+
+from pib_pro.layer1_autopilot.sociomotor import (  # noqa: E402
+    JerkLimitedPCHIPFilter,
+    NeckEyeTarget,
+    SociomotorAutopilot,
+)
+
+__all__ = [
+    "ActionChunkProposal",
+    "HybridVisuomotorProtocol",
+    "JerkLimitedPCHIPFilter",
+    "NeckEyeTarget",
+    "ScoredActionChunk",
+    "SociomotorAutopilot",
+    "SociomotorAutopilotProtocol",
+    "SociomotorTarget",
+]

@@ -34,6 +34,11 @@ from pib_pro.layer3_cognition.proactivity_and_memory import (
     SocialProfile,
     WorkingWorldBuffer,
 )
+from pib_pro.layer3_cognition.thor_llama_client import (
+    ThorDialogueReply,
+    ThorLlamaClientConfig,
+    ThorLlamaServerClient,
+)
 
 __all__ = [
     "AnticipatoryProactivityGate",
@@ -56,6 +61,9 @@ __all__ = [
     "SocialProfile",
     "SubgoalPlan",
     "System3DeliberationProtocol",
+    "ThorDialogueReply",
+    "ThorLlamaClientConfig",
+    "ThorLlamaServerClient",
     "WorkingWorldBuffer",
     "WorldStateContextToken",
     "build_world_state_context_token",

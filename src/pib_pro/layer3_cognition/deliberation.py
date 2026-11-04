@@ -151,11 +151,7 @@ class HierarchicalSystem3Planner:
         task_stages: tuple[str, ...],
         scene_summary: str,
     ) -> tuple[tuple[str, ...], bool]:
-        if (
-            self.cloud_adapter is not None
-            and self.cloud_available
-            and self.budget_remaining > 0
-        ):
+        if self.cloud_adapter is not None and self.cloud_available and self.budget_remaining > 0:
             try:
                 remote = self.cloud_adapter.plan_remote(task_stages, scene_summary)
                 self.budget_remaining -= 1
@@ -187,9 +183,7 @@ class HierarchicalSystem3Planner:
                     step_id=f"{plan_id}-clear",
                     skill_name=OBSTACLE_CLEAR_SKILL,
                     z_goal=clear_z,
-                    recovery_utterance=(
-                        "Something is blocking the target; I'll clear it first."
-                    ),
+                    recovery_utterance=("Something is blocking the target; I'll clear it first."),
                 )
             )
             spoke = True

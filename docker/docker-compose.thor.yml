@@ -1,0 +1,21 @@
+services:
+  pib-pro-thor:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.thor
+    image: pib-pro:thor
+    runtime: nvidia
+    network_mode: host
+    ipc: host
+    shm_size: "8gb"
+    volumes:
+      - /data/models:/data/models
+      - /data/huggingface:/data/huggingface
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - PIB_MODEL_CACHE=/data/models
+      - HF_HOME=/data/huggingface
+    devices:
+      - /dev/nvhost-ctrl
+      - /dev/nvhost-ctrl-gpu
+      - /dev/nvhost-prof-gpu

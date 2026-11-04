@@ -2,11 +2,12 @@
 
 from __future__ import annotations
 
+import importlib
 import re
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Literal
+from typing import Any, Literal
 
 _FEETECH_BY_ID_PATTERNS: tuple[re.Pattern[str], ...] = (
     re.compile(r"usb-1a86_", re.IGNORECASE),
@@ -188,7 +189,7 @@ class ChestOak4HardwareStatus:
 def probe_chest_oak4_hardware() -> ChestOak4HardwareStatus:
     """Probe DepthAI for a connected OAK device without requiring root."""
     try:
-        import depthai as dai
+        dai: Any = importlib.import_module("depthai")
     except ImportError:
         return ChestOak4HardwareStatus(
             depthai_available=False,

@@ -49,17 +49,35 @@ class HybridVisuomotorProtocol(Protocol):
     ) -> ScoredActionChunk: ...
 
 
+from pib_pro.layer1_autopilot.procedural_memory import (  # noqa: E402
+    LeRobotEpisodeFrame,
+    LeRobotV2Episode,
+    OfflineSkillConsolidator,
+    ProceduralMemoryRecorder,
+)
 from pib_pro.layer1_autopilot.sociomotor import (  # noqa: E402
     JerkLimitedPCHIPFilter,
     NeckEyeTarget,
     SociomotorAutopilot,
 )
+from pib_pro.layer1_autopilot.visuomotor_hybrid import (  # noqa: E402
+    GR00TActionProposer,
+    HybridVisuomotorController,
+    HybridVisuomotorStepResult,
+)
 
 __all__ = [
     "ActionChunkProposal",
+    "GR00TActionProposer",
+    "HybridVisuomotorController",
     "HybridVisuomotorProtocol",
+    "HybridVisuomotorStepResult",
     "JerkLimitedPCHIPFilter",
+    "LeRobotEpisodeFrame",
+    "LeRobotV2Episode",
     "NeckEyeTarget",
+    "OfflineSkillConsolidator",
+    "ProceduralMemoryRecorder",
     "ScoredActionChunk",
     "SociomotorAutopilot",
     "SociomotorAutopilotProtocol",

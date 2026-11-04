@@ -107,9 +107,7 @@ class HJEPAWorldModelEngine:
         n = min(src.size, MAX_JOINTS)
         act[:n] = src[:n]
         err = np.asarray(latent_error, dtype=np.float32).reshape(-1)
-        self._action_w = (
-            self._action_w + learning_rate * np.outer(err, act)
-        ).astype(np.float32)
+        self._action_w = (self._action_w + learning_rate * np.outer(err, act)).astype(np.float32)
 
     def _normalize_latent(self, z: NDArray[np.float32]) -> NDArray[np.float32]:
         return np.clip(z, -10.0, 10.0).astype(np.float32)
@@ -232,9 +230,7 @@ class HJEPAWorldModelEngine:
                 slot["joint_velocities_rad_s"],
             )
             act = (
-                action_chunk
-                if action_chunk is not None
-                else np.zeros(MAX_JOINTS, dtype=np.float32)
+                action_chunk if action_chunk is not None else np.zeros(MAX_JOINTS, dtype=np.float32)
             )
             z_hat_self = self.predict_self(z_t, act)
             z_hat_human = self.predict_human(

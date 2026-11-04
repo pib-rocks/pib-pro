@@ -153,9 +153,10 @@ class SurpriseGatedBehaviourTree:
         if self._active_step_id is None or self._active_status != BTStatus.RUNNING:
             self._surprise_crossed_at_s = None
             return None
-        if self._last_interrupt_s >= 0.0 and (
-            now_s - self._last_interrupt_s
-        ) < INTERRUPT_FRAME_PERIOD_S:
+        if (
+            self._last_interrupt_s >= 0.0
+            and (now_s - self._last_interrupt_s) < INTERRUPT_FRAME_PERIOD_S
+        ):
             return None
         self._last_interrupt_s = now_s
 
@@ -210,9 +211,10 @@ class SurpriseGatedBehaviourTree:
 
     def tick_on_bus(self, bus: WorldStateRingBuffer, now_s: float) -> BTStatus:
         """10 Hz executive tick advancing the active skill when surprise is low."""
-        if self._last_exec_tick_s >= 0.0 and (
-            now_s - self._last_exec_tick_s
-        ) < EXECUTIVE_TICK_PERIOD_S:
+        if (
+            self._last_exec_tick_s >= 0.0
+            and (now_s - self._last_exec_tick_s) < EXECUTIVE_TICK_PERIOD_S
+        ):
             return self._active_status
         self._last_exec_tick_s = now_s
 

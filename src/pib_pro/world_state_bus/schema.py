@@ -219,16 +219,14 @@ def interpolate_slots(
     a = np.float32(alpha)
     one_minus = np.float32(1.0 - alpha)
     out["objects"]["position_xyz"] = (
-        before["objects"]["position_xyz"] * one_minus
-        + after["objects"]["position_xyz"] * a
+        before["objects"]["position_xyz"] * one_minus + after["objects"]["position_xyz"] * a
     )
     out["joint_positions_rad"] = (
         before["joint_positions_rad"] * one_minus + after["joint_positions_rad"] * a
     )
     out["z_t"] = before["z_t"] * one_minus + after["z_t"] * a
     out["surprise_scalar"] = np.float32(
-        float(before["surprise_scalar"]) * (1.0 - alpha)
-        + float(after["surprise_scalar"]) * alpha
+        float(before["surprise_scalar"]) * (1.0 - alpha) + float(after["surprise_scalar"]) * alpha
     )
     ts = int(before["timestamp_ns"] + alpha * (after["timestamp_ns"] - before["timestamp_ns"]))
     out["timestamp_ns"] = ts
